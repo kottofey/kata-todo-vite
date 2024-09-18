@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint \"src/**/*.{js,jsx}\"",
-    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
+    "lint": "eslint --config .eslint.json \"src/**/*.{js,jsx}\"",
+    "lint:fix": "eslint --config .eslint.json \"src/**/*.{js,jsx}\" --fix",
     "format": "prettier .",
     "preview": "vite preview"
   },
