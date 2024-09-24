@@ -4,28 +4,80 @@ import { Component } from 'react';
 import NewTaskForm from '../NewTaskForm';
 import TaskList from '../TaskList';
 import Footer from '../Footer';
-import reducedHash from '../../helpers/reducedHash';
+import AddButton from '../AddButton';
+import createTask from '../../helpers/createTask';
+import getItemKey from '../../helpers/getItemKey';
 
 export default class App extends Component {
   state = {
     todoItems: [
-      { taskState: 'done', description: 'DONE!', created: '09-19-2024 01:24:00' },
-      // { taskState: 'editing', description: 'Editing', created: '11-12-2024 12:00' },
-      { taskState: 'active', description: 'To be done...', created: '9-12-2024 12:00' },
-      { description: 'No defined taskState task', created: '1-12-2024 12:00' },
+      createTask('Сделать раз'),
+      createTask('Сделать два'),
+      createTask('Сделать три'),
     ],
   };
 
   deleteItem = (id) => {
     this.setState(({ todoItems }) => {
-      const idx = todoItems.findIndex((item) => reducedHash(item.created) === id);
+      const idx = todoItems.findIndex((item) => getItemKey(item) === id);
 
       return {
         todoItems: [
           ...todoItems.slice(0, idx),
           ...todoItems.slice(idx + 1),
         ],
+      };
+    });
+  };
 
+  addItem = (text) => {
+    const newItem = createTask(`${text} ${(new Date()).getMilliseconds()}`);
+
+    this.setState(({ todoItems }) => {
+      const newArr = [
+        ...todoItems,
+        newItem,
+      ];
+
+      return {
+        todoItems: newArr,
+      };
+    });
+  };
+
+  onToggleDone = (id) => {
+    const { todoItems } = this.state;
+
+    const idx = todoItems.findIndex((item) => getItemKey(item) === id);
+    this.setState(() => {
+      const doneItem = { ...todoItems[idx] };
+      doneItem.isDone = !doneItem.isDone;
+
+      return {
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          doneItem,
+          ...todoItems.slice(idx + 1),
+        ],
+      };
+    });
+  };
+
+  onEditing = (id) => {
+    const { todoItems } = this.state;
+
+    const idx = todoItems.findIndex((item) => getItemKey(item) === id);
+    this.setState(() => {
+      const doneItem = { ...todoItems[idx] };
+      doneItem.isEditing = !doneItem.isEditing;
+      doneItem.isDone = false;
+
+      return {
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          doneItem,
+          ...todoItems.slice(idx + 1),
+        ],
       };
     });
   };
@@ -43,10 +95,17 @@ export default class App extends Component {
           <TaskList
             todoItems={todoItems}
             onDeleted={this.deleteItem}
+            onToggleDone={this.onToggleDone}
+            onEditing={this.onEditing}
           />
           <Footer />
+          <AddButton
+            onAdded={this.addItem}
+          />
+
         </section>
       </section>
+
     );
   }
 }
