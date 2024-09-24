@@ -2,12 +2,13 @@ import reducedHash from '../helpers/reducedHash';
 
 import Task from './Task';
 
-function reducedHash(str) {
-
-function TaskList({ todoItems }) {
+export default function TaskList({ todoItems, onDeleted }) {
   const items = todoItems.map((item) => (
     <li key={reducedHash(item.description)} className={item.taskState}>
-      <Task props={item} />
+      <Task
+        {...item}
+        onDeleted={() => onDeleted(reducedHash(item.description))}
+      />
     </li>
   ));
 
@@ -17,5 +18,3 @@ function TaskList({ todoItems }) {
     </ul>
   );
 }
-
-export default TaskList;
