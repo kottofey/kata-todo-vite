@@ -7,6 +7,7 @@ import Footer from '../Footer';
 import AddButton from '../AddButton';
 import createTask from '../../helpers/createTask';
 import getItemKey from '../../helpers/getItemKey';
+import updateTodoItemFiltered from '../../helpers/updateTodoItemFiltered';
 
 export default class App extends Component {
   state = {
@@ -15,9 +16,15 @@ export default class App extends Component {
       createTask('Сделать два'),
       createTask('Сделать три'),
     ],
+    filterSelected: {
+      current: 'all',
+      all: 'selected',
+      active: 'no',
+      completed: 'nooo',
+    },
   };
 
-  deleteItem = (id) => {
+  onDeleteItem = (id) => {
     this.setState(({ todoItems }) => {
       const idx = todoItems.findIndex((item) => getItemKey(item) === id);
 
@@ -30,7 +37,7 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text) => {
+  onAddItem = (text) => {
     const newItem = createTask(`${text} ${(new Date()).getMilliseconds()}`);
 
     this.setState(({ todoItems }) => {
@@ -45,13 +52,20 @@ export default class App extends Component {
     });
   };
 
-  onToggleDone = (id) => {
+  onClearCompleted = () => {
     const { todoItems } = this.state;
+    this.setState(() => ({ todoItems: todoItems.filter((item) => !item.isDone) }));
+  };
+
+  onToggleDone = (id) => {
+    const { todoItems, filterSelected } = this.state;
 
     const idx = todoItems.findIndex((item) => getItemKey(item) === id);
     this.setState(() => {
-      const doneItem = { ...todoItems[idx] };
+      let doneItem = { ...todoItems[idx] };
       doneItem.isDone = !doneItem.isDone;
+
+      doneItem = updateTodoItemFiltered(filterSelected.current, doneItem);
 
       return {
         todoItems: [
@@ -82,8 +96,22 @@ export default class App extends Component {
     });
   };
 
-  render() {
+  onFilterClick = (filterId) => {
     const { todoItems } = this.state;
+
+    const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
+
+    this.setState(() => ({
+      filterSelected: {
+        [filterId]: 'selected',
+        current: filterId,
+      },
+      todoItems: filteredArray,
+    }));
+  };
+
+  render() {
+    const { todoItems, filterSelected } = this.state;
 
     return (
       <section className="todoapp">
@@ -94,13 +122,18 @@ export default class App extends Component {
         <section className="main">
           <TaskList
             todoItems={todoItems}
-            onDeleted={this.deleteItem}
+            onDeleted={this.onDeleteItem}
             onToggleDone={this.onToggleDone}
             onEditing={this.onEditing}
           />
-          <Footer />
+          <Footer
+            onFilterClick={this.onFilterClick}
+            onClearCompleted={this.onClearCompleted}
+            filterSelected={filterSelected}
+            itemsLeft={todoItems.filter((item) => !item.isDone).length}
+          />
           <AddButton
-            onAdded={this.addItem}
+            onAdded={this.onAddItem}
           />
 
         </section>

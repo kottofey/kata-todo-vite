@@ -12,7 +12,11 @@ export default function TaskList({
     if (item.isEditing) classNames += 'editing';
 
     return (
-      <li key={getItemKey(item)} className={classNames}>
+      <li
+        key={getItemKey(item)}
+        className={classNames}
+        hidden={item.hidden}
+      >
         <Task
           {...item}
           onDeleted={() => onDeleted(getItemKey(item))}
