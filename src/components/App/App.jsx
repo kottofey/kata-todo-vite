@@ -6,8 +6,8 @@ import TaskList from '../TaskList';
 import Footer from '../Footer';
 import AddButton from '../AddButton';
 import createTask from '../../helpers/createTask';
-import getItemKey from '../../helpers/getItemKey';
 import updateTodoItemFiltered from '../../helpers/updateTodoItemFiltered';
+import getItemIndexById from '../../helpers/getItemIndexById';
 
 export default class App extends Component {
   state = {
@@ -26,7 +26,7 @@ export default class App extends Component {
 
   onDeleteItem = (id) => {
     this.setState(({ todoItems }) => {
-      const idx = todoItems.findIndex((item) => getItemKey(item) === id);
+      const idx = getItemIndexById(todoItems, id);
 
       return {
         todoItems: [
@@ -53,17 +53,17 @@ export default class App extends Component {
   };
 
   onClearCompleted = () => {
-    const { todoItems } = this.state;
-    this.setState(() => ({ todoItems: todoItems.filter((item) => !item.isDone) }));
+    this.setState(({ todoItems }) => ({ todoItems: todoItems.filter((item) => !item.isDone) }));
   };
 
   onToggleDone = (id) => {
-    const { todoItems, filterSelected } = this.state;
+    this.setState(({ todoItems, filterSelected }) => {
+      const idx = getItemIndexById(todoItems, id);
 
-    const idx = todoItems.findIndex((item) => getItemKey(item) === id);
-    this.setState(() => {
-      let doneItem = { ...todoItems[idx] };
-      doneItem.isDone = !doneItem.isDone;
+      let doneItem = {
+        ...todoItems[idx],
+        isDone: !todoItems[idx].isDone,
+      };
 
       doneItem = updateTodoItemFiltered(filterSelected.current, doneItem);
 
@@ -78,12 +78,14 @@ export default class App extends Component {
   };
 
   onEditing = (id) => {
-    const { todoItems } = this.state;
+    this.setState(({ todoItems }) => {
+      const idx = getItemIndexById(todoItems, id);
 
-    const idx = todoItems.findIndex((item) => getItemKey(item) === id);
-    this.setState(() => {
-      const doneItem = { ...todoItems[idx] };
-      doneItem.isEditing = !doneItem.isEditing;
+      const doneItem = {
+        ...todoItems[idx],
+        isEditing: !todoItems[idx].isEditing,
+      };
+      // TODO не забыть вернуть isDone = true, когда закончится правка элемента
       doneItem.isDone = false;
 
       return {
@@ -97,17 +99,17 @@ export default class App extends Component {
   };
 
   onFilterClick = (filterId) => {
-    const { todoItems } = this.state;
+    this.setState(({ todoItems }) => {
+      const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
 
-    const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
-
-    this.setState(() => ({
-      filterSelected: {
-        [filterId]: 'selected',
-        current: filterId,
-      },
-      todoItems: filteredArray,
-    }));
+      return {
+        filterSelected: {
+          [filterId]: 'selected',
+          current: filterId,
+        },
+        todoItems: filteredArray,
+      };
+    });
   };
 
   render() {

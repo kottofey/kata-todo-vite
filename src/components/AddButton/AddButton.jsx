@@ -8,7 +8,7 @@ export default function AddButton(props) {
         type="button"
         onClick={() => onAdded(description)}
       >
-        Add item
+        Add item (for debug)
       </button>
     </div>
 
