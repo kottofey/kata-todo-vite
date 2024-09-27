@@ -4,10 +4,9 @@ import { Component } from 'react';
 import NewTaskForm from '../NewTaskForm';
 import TaskList from '../TaskList';
 import Footer from '../Footer';
-import AddButton from '../AddButton';
 import createTask from '../../helpers/createTask';
 import updateTodoItemFiltered from '../../helpers/updateTodoItemFiltered';
-import getItemIndexById from '../../helpers/getItemIndexById';
+import getItemIndexByKey from '../../helpers/getItemIndexByKey';
 
 export default class App extends Component {
   state = {
@@ -19,14 +18,14 @@ export default class App extends Component {
     filterSelected: {
       current: 'all',
       all: 'selected',
-      active: 'no',
-      completed: 'nooo',
+      active: 'oh no',
+      completed: 'nooo-no-nooooooo',
     },
   };
 
-  onDeleteItem = (id) => {
+  onDeleteItem = (key) => {
     this.setState(({ todoItems }) => {
-      const idx = getItemIndexById(todoItems, id);
+      const idx = getItemIndexByKey(todoItems, key);
 
       return {
         todoItems: [
@@ -38,9 +37,9 @@ export default class App extends Component {
   };
 
   onAddItem = (text) => {
-    const newItem = createTask(`${text} ${(new Date()).getMilliseconds()}`);
-
-    this.setState(({ todoItems }) => {
+    this.setState(({ todoItems, filterSelected }) => {
+      let newItem = createTask(text);
+      newItem = updateTodoItemFiltered(filterSelected.current, newItem);
       const newArr = [
         ...todoItems,
         newItem,
@@ -56,9 +55,9 @@ export default class App extends Component {
     this.setState(({ todoItems }) => ({ todoItems: todoItems.filter((item) => !item.isDone) }));
   };
 
-  onToggleDone = (id) => {
+  onToggleDone = (key) => {
     this.setState(({ todoItems, filterSelected }) => {
-      const idx = getItemIndexById(todoItems, id);
+      const idx = getItemIndexByKey(todoItems, key);
 
       let doneItem = {
         ...todoItems[idx],
@@ -77,23 +76,27 @@ export default class App extends Component {
     });
   };
 
-  onEditing = (id) => {
-    this.setState(({ todoItems }) => {
-      const idx = getItemIndexById(todoItems, id);
+  onEditStart = (key) => {
+    this.setState(({ todoItems, editItems }) => {
+      const idx = getItemIndexByKey(todoItems, key);
 
-      const doneItem = {
+      const editItem = {
         ...todoItems[idx],
-        isEditing: !todoItems[idx].isEditing,
+        isEditing: true,
+        isDone: false,
       };
-      // TODO не забыть вернуть isDone = true, когда закончится правка элемента
-      doneItem.isDone = false;
+      const newEditItems = {
+        ...editItems,
+        [idx]: editItem.description,
+      };
 
       return {
         todoItems: [
           ...todoItems.slice(0, idx),
-          doneItem,
+          editItem,
           ...todoItems.slice(idx + 1),
         ],
+        editItems: newEditItems,
       };
     });
   };
@@ -112,6 +115,28 @@ export default class App extends Component {
     });
   };
 
+  onEditComplete = (value, key) => {
+    // TODO исправить возврат на невыполненное состояние когда редактируешь задачу
+
+    this.setState(({ todoItems, filterSelected }) => {
+      const idx = getItemIndexByKey(todoItems, key);
+      let editItem = { ...todoItems[idx], description: value };
+      editItem = updateTodoItemFiltered(filterSelected.current, editItem);
+      editItem.isEditing = false;
+
+      const newArr = [
+        ...todoItems.slice(0, idx),
+        editItem,
+        ...todoItems.slice(idx + 1),
+      ];
+
+      console.log(newArr);
+      return {
+        todoItems: newArr,
+      };
+    });
+  };
+
   render() {
     const { todoItems, filterSelected } = this.state;
 
@@ -119,14 +144,18 @@ export default class App extends Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm />
+          <NewTaskForm
+            onAddItem={this.onAddItem}
+            filterId={filterSelected.current}
+          />
         </header>
         <section className="main">
           <TaskList
             todoItems={todoItems}
             onDeleted={this.onDeleteItem}
             onToggleDone={this.onToggleDone}
-            onEditing={this.onEditing}
+            onEditStart={this.onEditStart}
+            onEditComplete={this.onEditComplete}
           />
           <Footer
             onFilterClick={this.onFilterClick}
@@ -134,9 +163,9 @@ export default class App extends Component {
             filterSelected={filterSelected}
             itemsLeft={todoItems.filter((item) => !item.isDone).length}
           />
-          <AddButton
-            onAdded={this.onAddItem}
-          />
+          {/* <AddButton */}
+          {/*  onAdded={this.onAddItem} */}
+          {/* /> */}
 
         </section>
       </section>

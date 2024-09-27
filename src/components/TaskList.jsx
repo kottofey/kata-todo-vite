@@ -1,10 +1,11 @@
-import getItemKey from '../helpers/getItemKey';
+import calcItemKey from '../helpers/calcItemKey';
 
 import Task from './Task';
 
 export default function TaskList({
   todoItems, onDeleted,
-  onToggleDone, onEditing,
+  onToggleDone, onEditStart, onEditInput,
+  onEditComplete,
 }) {
   const items = todoItems.map((item) => {
     let classNames = '';
@@ -13,15 +14,17 @@ export default function TaskList({
 
     return (
       <li
-        key={getItemKey(item)}
+        key={calcItemKey(item)}
         className={classNames}
         hidden={item.hidden}
       >
         <Task
           {...item}
-          onDeleted={() => onDeleted(getItemKey(item))}
-          onToggleDone={() => onToggleDone(getItemKey(item))}
-          onEditing={() => onEditing(getItemKey(item))}
+          onDeleted={() => onDeleted(calcItemKey(item))}
+          onToggleDone={() => onToggleDone(calcItemKey(item))}
+          onEditStart={() => onEditStart(calcItemKey(item))}
+          onEditInput={onEditInput}
+          onEditComplete={(value) => onEditComplete(value, calcItemKey(item))}
         />
       </li>
     );

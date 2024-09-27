@@ -1,47 +1,82 @@
 import { formatDistance } from 'date-fns';
+import { Component } from 'react';
 
-export default function Task({
-  description, created,
-  onDeleted, onEditing, onToggleDone,
-  isEditing,
-}) {
-  const editField = <input type="text" className="edit" value={description} />;
+export default class Task extends Component {
+  state = {
+    value: this.props.description,
+  };
 
-  return (
-    <>
-      <div className="view">
+  onEditInput = (e) => {
+    const { value } = e.target;
+    this.setState({ value });
+  };
+
+  onSubmit = (e) => {
+    const { onEditComplete } = this.props;
+    const { value } = this.state;
+
+    onEditComplete(value);
+    e.preventDefault();
+  };
+
+  render() {
+    const {
+      description, created,
+      onDeleted, onToggleDone,
+      onEditStart, isEditing,
+    } = this.props;
+
+    const { value } = this.state;
+
+    const editField = (
+      <form
+        onSubmit={this.onSubmit}
+      >
         <input
-          className="toggle"
-          type="checkbox"
-          onClick={onToggleDone}
+          onChange={this.onEditInput}
+          className="edit"
+          value={value}
+          autoFocus
         />
-        <label>
-          <span className="description">{description}</span>
-          <span className="created">
-            {
-              formatDistance(
-                new Date(created),
-                Date.now(),
-                {
-                  includeSeconds: true,
-                  addSuffix: true,
-                },
-              )
-            }
-          </span>
-        </label>
-        <button
-          type="button"
-          className="icon icon-edit"
-          onClick={onEditing}
-        />
-        <button
-          type="button"
-          className="icon icon-destroy"
-          onClick={onDeleted}
-        />
-      </div>
-      { isEditing ? editField : false }
-    </>
-  );
+      </form>
+    );
+
+    return (
+      <>
+        <div className="view">
+          <input
+            className="toggle"
+            type="checkbox"
+            onClick={onToggleDone}
+          />
+          <label>
+            <span className="description">{description}</span>
+            <span className="created">
+              {
+                formatDistance(
+                  new Date(created),
+                  Date.now(),
+                  {
+                    includeSeconds: true,
+                    addSuffix: true,
+                  },
+                )
+              }
+            </span>
+          </label>
+          <button
+            type="button"
+            className="icon icon-edit"
+            onClick={onEditStart}
+          />
+          <button
+            type="button"
+            className="icon icon-destroy"
+            onClick={onDeleted}
+          />
+        </div>
+        { isEditing ? editField : false }
+      </>
+    );
+  }
 }
