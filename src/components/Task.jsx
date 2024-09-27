@@ -24,6 +24,7 @@ export default class Task extends Component {
       description, created,
       onDeleted, onToggleDone,
       onEditStart, isEditing,
+      isDone,
     } = this.props;
 
     const { value } = this.state;
@@ -47,6 +48,7 @@ export default class Task extends Component {
           <input
             className="toggle"
             type="checkbox"
+            checked={isDone}
             onClick={onToggleDone}
           />
           <label>

@@ -9,8 +9,8 @@ export default function TaskList({
 }) {
   const items = todoItems.map((item) => {
     let classNames = '';
-    if (item.isDone) classNames += 'completed';
-    if (item.isEditing) classNames += 'editing';
+    if (item.isDone) classNames += ' completed';
+    if (item.isEditing) classNames += ' editing';
 
     return (
       <li

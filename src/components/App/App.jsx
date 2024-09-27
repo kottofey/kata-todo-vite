@@ -23,19 +23,6 @@ export default class App extends Component {
     },
   };
 
-  onDeleteItem = (key) => {
-    this.setState(({ todoItems }) => {
-      const idx = getItemIndexByKey(todoItems, key);
-
-      return {
-        todoItems: [
-          ...todoItems.slice(0, idx),
-          ...todoItems.slice(idx + 1),
-        ],
-      };
-    });
-  };
-
   onAddItem = (text) => {
     this.setState(({ todoItems, filterSelected }) => {
       let newItem = createTask(text);
@@ -47,6 +34,19 @@ export default class App extends Component {
 
       return {
         todoItems: newArr,
+      };
+    });
+  };
+
+  onDeleteItem = (key) => {
+    this.setState(({ todoItems }) => {
+      const idx = getItemIndexByKey(todoItems, key);
+
+      return {
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          ...todoItems.slice(idx + 1),
+        ],
       };
     });
   };
@@ -76,6 +76,20 @@ export default class App extends Component {
     });
   };
 
+  onFilterClick = (filterId) => {
+    this.setState(({ todoItems }) => {
+      const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
+
+      return {
+        filterSelected: {
+          [filterId]: 'selected',
+          current: filterId,
+        },
+        todoItems: filteredArray,
+      };
+    });
+  };
+
   onEditStart = (key) => {
     this.setState(({ todoItems, editItems }) => {
       const idx = getItemIndexByKey(todoItems, key);
@@ -83,7 +97,6 @@ export default class App extends Component {
       const editItem = {
         ...todoItems[idx],
         isEditing: true,
-        isDone: false,
       };
       const newEditItems = {
         ...editItems,
@@ -101,28 +114,14 @@ export default class App extends Component {
     });
   };
 
-  onFilterClick = (filterId) => {
-    this.setState(({ todoItems }) => {
-      const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
-
-      return {
-        filterSelected: {
-          [filterId]: 'selected',
-          current: filterId,
-        },
-        todoItems: filteredArray,
-      };
-    });
-  };
-
   onEditComplete = (value, key) => {
     // TODO исправить возврат на невыполненное состояние когда редактируешь задачу
 
     this.setState(({ todoItems, filterSelected }) => {
       const idx = getItemIndexByKey(todoItems, key);
       let editItem = { ...todoItems[idx], description: value };
-      editItem = updateTodoItemFiltered(filterSelected.current, editItem);
       editItem.isEditing = false;
+      editItem = updateTodoItemFiltered(filterSelected.current, editItem);
 
       const newArr = [
         ...todoItems.slice(0, idx),
@@ -130,7 +129,6 @@ export default class App extends Component {
         ...todoItems.slice(idx + 1),
       ];
 
-      console.log(newArr);
       return {
         todoItems: newArr,
       };
