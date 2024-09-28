@@ -1,8 +1,10 @@
 import { formatDistance } from 'date-fns';
 import { Component } from 'react';
+import { PropTypes } from 'prop-types';
 
 export default class Task extends Component {
   state = {
+    // eslint-disable-next-line react/destructuring-assignment
     value: this.props.description,
   };
 
@@ -23,23 +25,27 @@ export default class Task extends Component {
     const {
       description, created,
       onDeleted, onToggleDone,
-      onEditStart, isEditing,
-      isDone,
+      onEditStart,
+      isEditing, isDone,
     } = this.props;
 
     const { value } = this.state;
 
     const editField = (
-      <form
-        onSubmit={this.onSubmit}
-      >
+      <>
+        <form
+          onSubmit={this.onSubmit}
+          id="edit-form"
+          hidden
+        />
         <input
           onChange={this.onEditInput}
           className="edit"
           value={value}
-          autoFocus
+          form="edit-form"
         />
-      </form>
+      </>
+
     );
 
     return (
@@ -48,7 +54,7 @@ export default class Task extends Component {
           <input
             className="toggle"
             type="checkbox"
-            checked={isDone}
+            defaultChecked={isDone}
             onClick={onToggleDone}
           />
           <label>
@@ -56,7 +62,7 @@ export default class Task extends Component {
             <span className="created">
               {
                 formatDistance(
-                  new Date(created),
+                  created,
                   Date.now(),
                   {
                     includeSeconds: true,
@@ -82,3 +88,17 @@ export default class Task extends Component {
     );
   }
 }
+
+Task.defaultProps = {
+  description: 'Default Task, something\'s w\'ong',
+  created: Date.now(),
+  isDone: false,
+  isEditing: false,
+};
+
+Task.propTypes = {
+  description: PropTypes.string,
+  created: PropTypes.instanceOf(Date),
+  isDone: PropTypes.bool,
+  isEditing: PropTypes.bool,
+};

@@ -161,9 +161,6 @@ export default class App extends Component {
             filterSelected={filterSelected}
             itemsLeft={todoItems.filter((item) => !item.isDone).length}
           />
-          {/* <AddButton */}
-          {/*  onAdded={this.onAddItem} */}
-          {/* /> */}
 
         </section>
       </section>

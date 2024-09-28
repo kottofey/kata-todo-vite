@@ -1,3 +1,5 @@
+import { PropTypes } from 'prop-types';
+
 import calcItemKey from '../helpers/calcItemKey';
 
 import Task from './Task';
@@ -9,7 +11,7 @@ export default function TaskList({
 }) {
   const items = todoItems.map((item) => {
     let classNames = '';
-    if (item.isDone) classNames += ' completed';
+    if (item.isDone) classNames += 'completed';
     if (item.isEditing) classNames += ' editing';
 
     return (
@@ -36,3 +38,17 @@ export default function TaskList({
     </ul>
   );
 }
+
+// defaultProps is deprecated, used for training only
+TaskList.defaultProps = {
+  todoItems: [],
+};
+
+TaskList.propTypes = {
+  todoItems: PropTypes.arrayOf(PropTypes.shape({
+    description: PropTypes.string,
+    created: PropTypes.instanceOf(Date),
+    isDone: PropTypes.bool,
+    isEditing: PropTypes.bool,
+  })),
+};
