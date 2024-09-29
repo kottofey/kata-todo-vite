@@ -27,12 +27,7 @@ export default class Task extends Component {
   };
 
   render() {
-    const {
-      description, created,
-      onDeleted, onToggleDone,
-      onEditStart,
-      isEditing, isDone,
-    } = this.props;
+    const { description, created, onDeleted, onToggleDone, onEditStart, isEditing, isDone } = this.props;
 
     const { value } = this.state;
 
@@ -40,61 +35,55 @@ export default class Task extends Component {
       <>
         <form
           onSubmit={this.onSubmit}
-          id="edit-form"
+          id='edit-form'
           hidden
         />
         <input
           onChange={this.onEditInput}
-          className="edit"
+          className='edit'
           value={value}
-          form="edit-form"
+          form='edit-form'
         />
       </>
-
     );
 
     return (
       <>
-        <div className="view">
+        <div className='view'>
           <input
-            className="toggle"
-            type="checkbox"
+            className='toggle'
+            type='checkbox'
             defaultChecked={isDone}
             onClick={onToggleDone}
           />
           <label>
-            <span className="description">{description}</span>
-            <span className="created">
-              {
-                formatDistance(
-                  created,
-                  Date.now(),
-                  {
-                    includeSeconds: true,
-                    addSuffix: true,
-                  },
-                )
-              }
+            <span className='description'>{description}</span>
+            <span className='created'>
+              {formatDistance(created, Date.now(), {
+                includeSeconds: true,
+                addSuffix: true,
+              })}
             </span>
           </label>
           <button
-            type="button"
-            className="icon icon-edit"
+            type='button'
+            className='icon icon-edit'
             onClick={onEditStart}
           />
           <button
-            type="button"
-            className="icon icon-destroy"
+            type='button'
+            className='icon icon-destroy'
             onClick={onDeleted}
           />
         </div>
-        { isEditing ? editField : false }
+        {isEditing ? editField : false}
       </>
     );
   }
 }
 
 Task.defaultProps = {
+  // eslint-disable-next-line prettier/prettier
   description: 'Default Task, something\'s w\'ong',
   created: Date.now(),
   isDone: false,

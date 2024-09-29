@@ -1,9 +1,9 @@
 export default function TasksFilter({ onFilterClick, filterSelected }) {
   return (
-    <ul className="filters">
+    <ul className='filters'>
       <li>
         <button
-          type="button"
+          type='button'
           onClick={() => onFilterClick('all')}
           className={filterSelected.all}
         >
@@ -12,7 +12,7 @@ export default function TasksFilter({ onFilterClick, filterSelected }) {
       </li>
       <li>
         <button
-          type="button"
+          type='button'
           onClick={() => onFilterClick('active')}
           className={filterSelected.active}
         >
@@ -21,7 +21,7 @@ export default function TasksFilter({ onFilterClick, filterSelected }) {
       </li>
       <li>
         <button
-          type="button"
+          type='button'
           onClick={() => onFilterClick('completed')}
           className={filterSelected.completed}
         >

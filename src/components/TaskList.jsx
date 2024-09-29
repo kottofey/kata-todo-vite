@@ -4,11 +4,7 @@ import calcItemKey from '../helpers/calcItemKey';
 
 import Task from './Task';
 
-export default function TaskList({
-  todoItems, onDeleted,
-  onToggleDone, onEditStart, onEditInput,
-  onEditComplete,
-}) {
+export default function TaskList({ todoItems, onDeleted, onToggleDone, onEditStart, onEditInput, onEditComplete }) {
   const items = todoItems.map((item) => {
     let classNames = '';
     if (item.isDone) classNames += 'completed';
@@ -32,11 +28,7 @@ export default function TaskList({
     );
   });
 
-  return (
-    <ul className="todo-list">
-      {items}
-    </ul>
-  );
+  return <ul className='todo-list'>{items}</ul>;
 }
 
 // defaultProps is deprecated, used for training only
@@ -45,10 +37,12 @@ TaskList.defaultProps = {
 };
 
 TaskList.propTypes = {
-  todoItems: PropTypes.arrayOf(PropTypes.shape({
-    description: PropTypes.string,
-    created: PropTypes.instanceOf(Date),
-    isDone: PropTypes.bool,
-    isEditing: PropTypes.bool,
-  })),
+  todoItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string,
+      created: PropTypes.instanceOf(Date),
+      isDone: PropTypes.bool,
+      isEditing: PropTypes.bool,
+    })
+  ),
 };

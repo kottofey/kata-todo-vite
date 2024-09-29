@@ -10,11 +10,7 @@ import getItemIndexByKey from '../../helpers/getItemIndexByKey';
 
 export default class App extends Component {
   state = {
-    todoItems: [
-      createTask('Сделать раз'),
-      createTask('Сделать два'),
-      createTask('Сделать три'),
-    ],
+    todoItems: [createTask('Сделать раз'), createTask('Сделать два'), createTask('Сделать три')],
     filterSelected: {
       current: 'all',
       all: 'selected',
@@ -27,10 +23,7 @@ export default class App extends Component {
     this.setState(({ todoItems, filterSelected }) => {
       let newItem = createTask(text);
       newItem = updateTodoItemFiltered(filterSelected.current, newItem);
-      const newArr = [
-        ...todoItems,
-        newItem,
-      ];
+      const newArr = [...todoItems, newItem];
 
       return {
         todoItems: newArr,
@@ -43,16 +36,15 @@ export default class App extends Component {
       const idx = getItemIndexByKey(todoItems, key);
 
       return {
-        todoItems: [
-          ...todoItems.slice(0, idx),
-          ...todoItems.slice(idx + 1),
-        ],
+        todoItems: [...todoItems.slice(0, idx), ...todoItems.slice(idx + 1)],
       };
     });
   };
 
   onClearCompleted = () => {
-    this.setState(({ todoItems }) => ({ todoItems: todoItems.filter((item) => !item.isDone) }));
+    this.setState(({ todoItems }) => ({
+      todoItems: todoItems.filter((item) => !item.isDone),
+    }));
   };
 
   onToggleDone = (key) => {
@@ -67,11 +59,7 @@ export default class App extends Component {
       doneItem = updateTodoItemFiltered(filterSelected.current, doneItem);
 
       return {
-        todoItems: [
-          ...todoItems.slice(0, idx),
-          doneItem,
-          ...todoItems.slice(idx + 1),
-        ],
+        todoItems: [...todoItems.slice(0, idx), doneItem, ...todoItems.slice(idx + 1)],
       };
     });
   };
@@ -104,30 +92,20 @@ export default class App extends Component {
       };
 
       return {
-        todoItems: [
-          ...todoItems.slice(0, idx),
-          editItem,
-          ...todoItems.slice(idx + 1),
-        ],
+        todoItems: [...todoItems.slice(0, idx), editItem, ...todoItems.slice(idx + 1)],
         editItems: newEditItems,
       };
     });
   };
 
   onEditComplete = (value, key) => {
-    // TODO исправить возврат на невыполненное состояние когда редактируешь задачу
-
     this.setState(({ todoItems, filterSelected }) => {
       const idx = getItemIndexByKey(todoItems, key);
       let editItem = { ...todoItems[idx], description: value };
       editItem.isEditing = false;
       editItem = updateTodoItemFiltered(filterSelected.current, editItem);
 
-      const newArr = [
-        ...todoItems.slice(0, idx),
-        editItem,
-        ...todoItems.slice(idx + 1),
-      ];
+      const newArr = [...todoItems.slice(0, idx), editItem, ...todoItems.slice(idx + 1)];
 
       return {
         todoItems: newArr,
@@ -139,15 +117,15 @@ export default class App extends Component {
     const { todoItems, filterSelected } = this.state;
 
     return (
-      <section className="todoapp">
-        <header className="header">
+      <section className='todoapp'>
+        <header className='header'>
           <h1>todos</h1>
           <NewTaskForm
             onAddItem={this.onAddItem}
             filterId={filterSelected.current}
           />
         </header>
-        <section className="main">
+        <section className='main'>
           <TaskList
             todoItems={todoItems}
             onDeleted={this.onDeleteItem}
@@ -161,10 +139,8 @@ export default class App extends Component {
             filterSelected={filterSelected}
             itemsLeft={todoItems.filter((item) => !item.isDone).length}
           />
-
         </section>
       </section>
-
     );
   }
 }

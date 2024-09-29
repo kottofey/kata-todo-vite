@@ -31,8 +31,8 @@ export default class NewTaskForm extends Component {
       <form onSubmit={this.onSubmit}>
         <input
           onChange={this.onNewItemInput}
-          className="new-todo"
-          placeholder="What needs to be done?"
+          className='new-todo'
+          placeholder='What needs to be done?'
           value={value}
         />
       </form>
