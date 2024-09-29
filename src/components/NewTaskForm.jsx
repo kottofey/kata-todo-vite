@@ -14,6 +14,11 @@ export default class NewTaskForm extends Component {
     const { value } = this.state;
     const { onAddItem } = this.props;
 
+    if (!value.trim()) {
+      this.setState({ value: '' });
+      event.preventDefault();
+      return;
+    }
     onAddItem(value);
 
     this.setState({ value: '' });

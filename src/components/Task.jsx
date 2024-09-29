@@ -17,6 +17,11 @@ export default class Task extends Component {
     const { onEditComplete } = this.props;
     const { value } = this.state;
 
+    if (!value.trim()) {
+      e.preventDefault();
+      return;
+    }
+
     onEditComplete(value);
     e.preventDefault();
   };
