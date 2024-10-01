@@ -1,4 +1,4 @@
-import TasksFilter from './TasksFilter';
+import TasksFilter from '../TasksFilter';
 
 export default function Footer({ onFilterClick, filterSelected, onClearCompleted, itemsLeft }) {
   return (

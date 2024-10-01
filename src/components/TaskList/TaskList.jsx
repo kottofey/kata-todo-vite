@@ -1,8 +1,7 @@
 import { PropTypes } from 'prop-types';
 
-import calcItemKey from '../helpers/calcItemKey';
-
-import Task from './Task';
+import calcItemKey from '../../helpers/calcItemKey';
+import Task from '../Task';
 
 export default function TaskList({ todoItems, onDeleted, onToggleDone, onEditStart, onEditInput, onEditComplete }) {
   const items = todoItems.map((item) => {
@@ -40,7 +39,7 @@ TaskList.propTypes = {
   todoItems: PropTypes.arrayOf(
     PropTypes.shape({
       description: PropTypes.string,
-      created: PropTypes.instanceOf(Date),
+      created: PropTypes.number,
       isDone: PropTypes.bool,
       isEditing: PropTypes.bool,
     })

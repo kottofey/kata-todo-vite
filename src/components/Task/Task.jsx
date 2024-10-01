@@ -30,7 +30,9 @@ export default class Task extends Component {
     const { description, created, onDeleted, onToggleDone, onEditStart, isEditing, isDone } = this.props;
 
     const { value } = this.state;
-
+    // TODO Вынести форму editForm в return самый конец.
+    //  Стили её правильно обрабатывают, не нужно городить
+    //  велосипеды с тернарными операторами итд
     const editField = (
       <>
         <form
@@ -51,12 +53,13 @@ export default class Task extends Component {
       <>
         <div className='view'>
           <input
+            id={Date.parse(created) + description}
             className='toggle'
             type='checkbox'
             defaultChecked={isDone}
             onClick={onToggleDone}
           />
-          <label>
+          <label htmlFor={Date.parse(created) + description}>
             <span className='description'>{description}</span>
             <span className='created'>
               {formatDistance(created, Date.now(), {
@@ -83,8 +86,7 @@ export default class Task extends Component {
 }
 
 Task.defaultProps = {
-  // eslint-disable-next-line prettier/prettier
-  description: 'Default Task, something\'s w\'ong',
+  description: 'Default Task, something\u0039s w\u0039ong',
   created: Date.now(),
   isDone: false,
   isEditing: false,
@@ -92,7 +94,7 @@ Task.defaultProps = {
 
 Task.propTypes = {
   description: PropTypes.string,
-  created: PropTypes.instanceOf(Date),
+  created: PropTypes.number,
   isDone: PropTypes.bool,
   isEditing: PropTypes.bool,
 };

@@ -6,20 +6,34 @@
   "ignorePatterns": [
     "node_modules",
     "dist",
-    "build"
+    "build",
+    "_archive"
   ],
   "extends": [
     "eslint:recommended",
+    "airbnb",
+    "airbnb/hooks",
     "plugin:react/recommended",
     "plugin:import/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:prettier/recommended",
-    "airbnb",
-    "airbnb/hooks",
     "prettier"
   ],
   "parserOptions": {
+    "requireConfigFile": false,
+    "parser": "@babel/eslint-parser",
+    "babelOptions": {
+      "parserOpts": {
+        "plugins": ["jsx"]
+      },
+      "babelrc": false,
+      "configFile": false,
+      "presets": [
+        "airbnb",
+        "@babel/preset-env"
+      ]
+    },
     "ecmaFeatures": {
       "jsx": true
     },
@@ -27,6 +41,7 @@
     "sourceType": "module"
   },
   "plugins": [
+    "babel",
     "react",
     "import",
     "prettier"
