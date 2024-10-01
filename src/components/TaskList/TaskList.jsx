@@ -1,4 +1,5 @@
 import { PropTypes } from 'prop-types';
+import classNames from 'classnames';
 
 import Task from '../Task';
 
@@ -11,14 +12,15 @@ export default function TaskList({
   onEditComplete,
 }) {
   const items = todoItems.map((item) => {
-    let classNames = '';
-    if (item.isDone) classNames += 'completed';
-    if (item.isEditing) classNames += ' editing';
+    const { isDone, isEditing } = item;
+    let classes = '';
+    if (isDone) classes = classNames(classes, 'completed');
+    if (isEditing) classes = classNames(classes, 'editing');
 
     return (
       <li
         key={item.created}
-        className={classNames}
+        className={classes}
         hidden={item.hidden}
       >
         <Task

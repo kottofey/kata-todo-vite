@@ -6,7 +6,6 @@
  */
 
 export default function updateTodoItemFiltered(filterSelected, item) {
-  console.log(`item: ${item.description}, fil: ${filterSelected}`);
   if (filterSelected === 'completed' && !item.isDone) {
     return { ...item, hidden: true };
   }

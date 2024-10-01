@@ -105,12 +105,13 @@ export default class App extends Component {
   onEditComplete = (value, id) => {
     this.setState(({ todoItems, filterSelected }) => {
       const idx = getItemIndex(todoItems, id);
-      let editItem = { ...todoItems[idx], description: value };
-      editItem.isEditing = false;
-      editItem = updateTodoItemFiltered(
-        filterSelected.current,
-        editItem
-      );
+      let editItem = {
+        ...todoItems[idx],
+        description: value,
+        isEditing: false,
+      };
+
+      editItem = updateTodoItemFiltered(filterSelected, editItem);
 
       const newArr = [
         ...todoItems.slice(0, idx),
@@ -131,10 +132,7 @@ export default class App extends Component {
       <section className='todoapp'>
         <header className='header'>
           <h1>todos</h1>
-          <NewTaskForm
-            onAddItem={this.onAddItem}
-            filterId={filterSelected.current}
-          />
+          <NewTaskForm onAddItem={this.onAddItem} />
         </header>
         <section className='main'>
           <TaskList
