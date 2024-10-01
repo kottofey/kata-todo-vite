@@ -1,16 +1,17 @@
 /**
  *
- * @param {string} filterId - current filter name. Taken from state.
+ * @param {string} filterSelected - current filter name. Taken from state.
  * @param {Object} item - Item to be updated
  * @returns {Object} - Updated item with current filter applied
  */
 
-export default function updateTodoItemFiltered(filterId, item) {
-  if (filterId === 'completed' && !item.isDone) {
+export default function updateTodoItemFiltered(filterSelected, item) {
+  console.log(`item: ${item.description}, fil: ${filterSelected}`);
+  if (filterSelected === 'completed' && !item.isDone) {
     return { ...item, hidden: true };
   }
 
-  if (filterId === 'active' && item.isDone) {
+  if (filterSelected === 'active' && item.isDone) {
     return { ...item, hidden: true };
   }
 

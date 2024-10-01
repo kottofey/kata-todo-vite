@@ -5,7 +5,7 @@ export default function TasksFilter({ onFilterClick, filterSelected }) {
         <button
           type='button'
           onClick={() => onFilterClick('all')}
-          className={filterSelected.all}
+          className={filterSelected === 'all' ? 'selected' : ''}
         >
           All
         </button>
@@ -14,7 +14,7 @@ export default function TasksFilter({ onFilterClick, filterSelected }) {
         <button
           type='button'
           onClick={() => onFilterClick('active')}
-          className={filterSelected.active}
+          className={filterSelected === 'active' ? 'selected' : ''}
         >
           Active
         </button>
@@ -23,7 +23,7 @@ export default function TasksFilter({ onFilterClick, filterSelected }) {
         <button
           type='button'
           onClick={() => onFilterClick('completed')}
-          className={filterSelected.completed}
+          className={filterSelected === 'completed' ? 'selected' : ''}
         >
           Completed
         </button>

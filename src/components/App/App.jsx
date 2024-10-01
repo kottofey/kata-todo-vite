@@ -10,18 +10,13 @@ import getItemIndex from '../../helpers/getItemIndex';
 export default class App extends Component {
   state = {
     todoItems: [],
-    filterSelected: {
-      current: 'all',
-      all: 'selected',
-      active: '',
-      completed: '',
-    },
+    filterSelected: 'all',
   };
 
   onAddItem = (text) => {
     this.setState(({ todoItems, filterSelected }) => {
       let newItem = createTask(text);
-      newItem = updateTodoItemFiltered(filterSelected.current, newItem);
+      newItem = updateTodoItemFiltered(filterSelected, newItem);
       const newArr = [...todoItems, newItem];
 
       return {
@@ -55,7 +50,7 @@ export default class App extends Component {
         isDone: !todoItems[idx].isDone,
       };
 
-      doneItem = updateTodoItemFiltered(filterSelected.current, doneItem);
+      doneItem = updateTodoItemFiltered(filterSelected, doneItem);
 
       return {
         todoItems: [...todoItems.slice(0, idx), doneItem, ...todoItems.slice(idx + 1)],
@@ -63,15 +58,14 @@ export default class App extends Component {
     });
   };
 
-  onFilterClick = (filterId) => {
+  onFilterClick = (filter) => {
     this.setState(({ todoItems }) => {
-      const filteredArray = todoItems.map((item) => updateTodoItemFiltered(filterId, item));
+      const filteredArray = todoItems.map((item) =>
+        updateTodoItemFiltered(filter, item)
+      );
 
       return {
-        filterSelected: {
-          [filterId]: 'selected',
-          current: filterId,
-        },
+        filterSelected: filter,
         todoItems: filteredArray,
       };
     });
@@ -102,7 +96,10 @@ export default class App extends Component {
       const idx = getItemIndex(todoItems, id);
       let editItem = { ...todoItems[idx], description: value };
       editItem.isEditing = false;
-      editItem = updateTodoItemFiltered(filterSelected.current, editItem);
+      editItem = updateTodoItemFiltered(
+        filterSelected.current,
+        editItem
+      );
 
       const newArr = [...todoItems.slice(0, idx), editItem, ...todoItems.slice(idx + 1)];
 
