@@ -1,7 +1,7 @@
 export default function createTask(description) {
   return {
     description,
-    created: Date.now(),
+    created: new Date().getTime(),
     isDone: false,
     isEditing: false,
     hidden: false,

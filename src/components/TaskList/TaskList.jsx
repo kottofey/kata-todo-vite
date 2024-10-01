@@ -1,9 +1,8 @@
 import { PropTypes } from 'prop-types';
 
-import calcItemKey from '../../helpers/calcItemKey';
 import Task from '../Task';
 
-export default function TaskList({ todoItems, onDeleted, onToggleDone, onEditStart, onEditInput, onEditComplete }) {
+export default function TaskList({ todoItems, onDeleteItem, onToggleDone, onEditStart, onEditInput, onEditComplete }) {
   const items = todoItems.map((item) => {
     let classNames = '';
     if (item.isDone) classNames += 'completed';
@@ -11,17 +10,17 @@ export default function TaskList({ todoItems, onDeleted, onToggleDone, onEditSta
 
     return (
       <li
-        key={calcItemKey(item)}
+        key={item.created}
         className={classNames}
         hidden={item.hidden}
       >
         <Task
           {...item}
-          onDeleted={() => onDeleted(calcItemKey(item))}
-          onToggleDone={() => onToggleDone(calcItemKey(item))}
-          onEditStart={() => onEditStart(calcItemKey(item))}
+          onDeleteItem={() => onDeleteItem(item.created)}
+          onToggleDone={() => onToggleDone(item.created)}
+          onEditStart={() => onEditStart(item.created)}
           onEditInput={onEditInput}
-          onEditComplete={(value) => onEditComplete(value, calcItemKey(item))}
+          onEditComplete={(value) => onEditComplete(value, item.created)}
         />
       </li>
     );

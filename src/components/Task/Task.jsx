@@ -4,7 +4,6 @@ import { PropTypes } from 'prop-types';
 
 export default class Task extends Component {
   state = {
-    // eslint-disable-next-line react/destructuring-assignment
     value: this.props.description,
   };
 
@@ -27,7 +26,7 @@ export default class Task extends Component {
   };
 
   render() {
-    const { description, created, onDeleted, onToggleDone, onEditStart, isEditing, isDone } = this.props;
+    const { description, created, onDeleteItem, onToggleDone, onEditStart, isEditing, isDone } = this.props;
 
     const { value } = this.state;
     // TODO Вынести форму editForm в return самый конец.
@@ -53,13 +52,13 @@ export default class Task extends Component {
       <>
         <div className='view'>
           <input
-            id={Date.parse(created) + description}
+            id={created}
             className='toggle'
             type='checkbox'
             defaultChecked={isDone}
             onClick={onToggleDone}
           />
-          <label htmlFor={Date.parse(created) + description}>
+          <label htmlFor={created}>
             <span className='description'>{description}</span>
             <span className='created'>
               {formatDistance(created, Date.now(), {
@@ -76,7 +75,7 @@ export default class Task extends Component {
           <button
             type='button'
             className='icon icon-destroy'
-            onClick={onDeleted}
+            onClick={onDeleteItem}
           />
         </div>
         {isEditing ? editField : false}
@@ -87,7 +86,7 @@ export default class Task extends Component {
 
 Task.defaultProps = {
   description: 'Default Task, something\u0039s w\u0039ong',
-  created: Date.now(),
+  created: new Date().getTime(),
   isDone: false,
   isEditing: false,
 };

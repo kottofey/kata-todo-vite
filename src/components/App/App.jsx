@@ -5,16 +5,16 @@ import TaskList from '../TaskList';
 import Footer from '../Footer';
 import createTask from '../../helpers/createTask';
 import updateTodoItemFiltered from '../../helpers/updateTodoItemFiltered';
-import getItemIndexByKey from '../../helpers/getItemIndexByKey';
+import getItemIndex from '../../helpers/getItemIndex';
 
 export default class App extends Component {
   state = {
-    todoItems: [createTask('Сделать раз'), createTask('Сделать два'), createTask('Сделать три')],
+    todoItems: [],
     filterSelected: {
       current: 'all',
       all: 'selected',
-      active: 'oh no',
-      completed: 'nooo-no-nooooooo',
+      active: '',
+      completed: '',
     },
   };
 
@@ -30,9 +30,9 @@ export default class App extends Component {
     });
   };
 
-  onDeleteItem = (key) => {
+  onDeleteItem = (id) => {
     this.setState(({ todoItems }) => {
-      const idx = getItemIndexByKey(todoItems, key);
+      const idx = getItemIndex(todoItems, id);
 
       return {
         todoItems: [...todoItems.slice(0, idx), ...todoItems.slice(idx + 1)],
@@ -46,9 +46,9 @@ export default class App extends Component {
     }));
   };
 
-  onToggleDone = (key) => {
+  onToggleDone = (id) => {
     this.setState(({ todoItems, filterSelected }) => {
-      const idx = getItemIndexByKey(todoItems, key);
+      const idx = getItemIndex(todoItems, id);
 
       let doneItem = {
         ...todoItems[idx],
@@ -77,9 +77,9 @@ export default class App extends Component {
     });
   };
 
-  onEditStart = (key) => {
+  onEditStart = (id) => {
     this.setState(({ todoItems, editItems }) => {
-      const idx = getItemIndexByKey(todoItems, key);
+      const idx = getItemIndex(todoItems, id);
 
       const editItem = {
         ...todoItems[idx],
@@ -97,9 +97,9 @@ export default class App extends Component {
     });
   };
 
-  onEditComplete = (value, key) => {
+  onEditComplete = (value, id) => {
     this.setState(({ todoItems, filterSelected }) => {
-      const idx = getItemIndexByKey(todoItems, key);
+      const idx = getItemIndex(todoItems, id);
       let editItem = { ...todoItems[idx], description: value };
       editItem.isEditing = false;
       editItem = updateTodoItemFiltered(filterSelected.current, editItem);
@@ -127,7 +127,7 @@ export default class App extends Component {
         <section className='main'>
           <TaskList
             todoItems={todoItems}
-            onDeleted={this.onDeleteItem}
+            onDeleteItem={this.onDeleteItem}
             onToggleDone={this.onToggleDone}
             onEditStart={this.onEditStart}
             onEditComplete={this.onEditComplete}
