@@ -30,7 +30,10 @@ export default class App extends Component {
       const idx = getItemIndex(todoItems, id);
 
       return {
-        todoItems: [...todoItems.slice(0, idx), ...todoItems.slice(idx + 1)],
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          ...todoItems.slice(idx + 1),
+        ],
       };
     });
   };
@@ -53,7 +56,11 @@ export default class App extends Component {
       doneItem = updateTodoItemFiltered(filterSelected, doneItem);
 
       return {
-        todoItems: [...todoItems.slice(0, idx), doneItem, ...todoItems.slice(idx + 1)],
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          doneItem,
+          ...todoItems.slice(idx + 1),
+        ],
       };
     });
   };
@@ -85,7 +92,11 @@ export default class App extends Component {
       };
 
       return {
-        todoItems: [...todoItems.slice(0, idx), editItem, ...todoItems.slice(idx + 1)],
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          editItem,
+          ...todoItems.slice(idx + 1),
+        ],
         editItems: newEditItems,
       };
     });
@@ -101,7 +112,11 @@ export default class App extends Component {
         editItem
       );
 
-      const newArr = [...todoItems.slice(0, idx), editItem, ...todoItems.slice(idx + 1)];
+      const newArr = [
+        ...todoItems.slice(0, idx),
+        editItem,
+        ...todoItems.slice(idx + 1),
+      ];
 
       return {
         todoItems: newArr,
@@ -133,7 +148,9 @@ export default class App extends Component {
             onFilterClick={this.onFilterClick}
             onClearCompleted={this.onClearCompleted}
             filterSelected={filterSelected}
-            itemsLeft={todoItems.filter((item) => !item.isDone).length}
+            itemsLeft={
+              todoItems.filter((item) => !item.isDone).length
+            }
           />
         </section>
       </section>

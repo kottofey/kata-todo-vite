@@ -26,7 +26,15 @@ export default class Task extends Component {
   };
 
   render() {
-    const { description, created, onDeleteItem, onToggleDone, onEditStart, isEditing, isDone } = this.props;
+    const {
+      description,
+      created,
+      onDeleteItem,
+      onToggleDone,
+      onEditStart,
+      isEditing,
+      isDone,
+    } = this.props;
 
     const { value } = this.state;
     // TODO Вынести форму editForm в return самый конец.

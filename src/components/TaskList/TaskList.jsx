@@ -2,7 +2,14 @@ import { PropTypes } from 'prop-types';
 
 import Task from '../Task';
 
-export default function TaskList({ todoItems, onDeleteItem, onToggleDone, onEditStart, onEditInput, onEditComplete }) {
+export default function TaskList({
+  todoItems,
+  onDeleteItem,
+  onToggleDone,
+  onEditStart,
+  onEditInput,
+  onEditComplete,
+}) {
   const items = todoItems.map((item) => {
     let classNames = '';
     if (item.isDone) classNames += 'completed';
@@ -20,7 +27,9 @@ export default function TaskList({ todoItems, onDeleteItem, onToggleDone, onEdit
           onToggleDone={() => onToggleDone(item.created)}
           onEditStart={() => onEditStart(item.created)}
           onEditInput={onEditInput}
-          onEditComplete={(value) => onEditComplete(value, item.created)}
+          onEditComplete={(value) =>
+            onEditComplete(value, item.created)
+          }
         />
       </li>
     );

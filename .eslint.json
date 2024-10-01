@@ -109,7 +109,7 @@
         "jsxSingleQuote": true,
         "trailingComma": "es5",
         "endOfLine": "auto",
-        "printWidth": 120,
+        "printWidth": 70,
         "singleAttributePerLine": true
       }
     ]

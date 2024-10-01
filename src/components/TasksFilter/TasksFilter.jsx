@@ -1,4 +1,7 @@
-export default function TasksFilter({ onFilterClick, filterSelected }) {
+export default function TasksFilter({
+  onFilterClick,
+  filterSelected,
+}) {
   return (
     <ul className='filters'>
       <li>
