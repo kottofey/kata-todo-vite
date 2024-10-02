@@ -87,12 +87,9 @@ Task.defaultProps = {
   description: 'Default Task, something\u0039s w\u0039ong',
   created: new Date().getTime(),
   isDone: false,
-  isEditing: false,
 };
-
 Task.propTypes = {
   description: PropTypes.string,
   created: PropTypes.number,
   isDone: PropTypes.bool,
-  isEditing: PropTypes.bool,
 };
