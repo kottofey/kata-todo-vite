@@ -12,6 +12,8 @@ export default function TaskList({
   onEditComplete,
 }) {
   const items = todoItems.map((item) => {
+    if (item.hidden) return false;
+
     const { isDone, isEditing } = item;
     let classes = '';
     if (isDone) classes = classNames(classes, 'completed');
@@ -21,7 +23,6 @@ export default function TaskList({
       <li
         key={item.created}
         className={classes}
-        hidden={item.hidden}
       >
         <Task
           {...item}
