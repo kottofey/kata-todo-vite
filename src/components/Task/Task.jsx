@@ -32,29 +32,10 @@ export default class Task extends Component {
       onDeleteItem,
       onToggleDone,
       onEditStart,
-      isEditing,
       isDone,
     } = this.props;
 
     const { value } = this.state;
-    // TODO Вынести форму editForm в return самый конец.
-    //  Стили её правильно обрабатывают, не нужно городить
-    //  велосипеды с тернарными операторами итд
-    const editField = (
-      <>
-        <form
-          onSubmit={this.onSubmit}
-          id={`edit-${created}`}
-          hidden
-        />
-        <input
-          onChange={this.onEditInput}
-          className='edit'
-          value={value}
-          form={`edit-${created}`}
-        />
-      </>
-    );
 
     return (
       <>
@@ -86,7 +67,17 @@ export default class Task extends Component {
             onClick={onDeleteItem}
           />
         </div>
-        {isEditing ? editField : false}
+        <form
+          onSubmit={this.onSubmit}
+          id={`edit-${created}`}
+          hidden
+        />
+        <input
+          onChange={this.onEditInput}
+          className='edit'
+          value={value}
+          form={`edit-${created}`}
+        />
       </>
     );
   }
