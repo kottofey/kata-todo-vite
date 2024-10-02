@@ -44,14 +44,14 @@ export default class Task extends Component {
       <>
         <form
           onSubmit={this.onSubmit}
-          id='edit-form'
+          id={`edit-${created}`}
           hidden
         />
         <input
           onChange={this.onEditInput}
           className='edit'
           value={value}
-          form='edit-form'
+          form={`edit-${created}`}
         />
       </>
     );
