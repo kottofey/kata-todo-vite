@@ -91,6 +91,7 @@
     "no-inline-comments": "error",
     "jsx-a11y/control-has-associated-label": "off",
     "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/no-autofocus": "off",
     "react/jsx-filename-extension": [
       1,
       {

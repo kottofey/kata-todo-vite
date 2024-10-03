@@ -11,34 +11,37 @@ export default function TaskList({
   onEditInput,
   onEditComplete,
 }) {
-  const items = todoItems.map((item) => {
-    if (item.hidden) return false;
+  return (
+    <ul className='todo-list'>
+      {todoItems.map((item) => {
+        if (item.hidden) return false;
 
-    const { isDone, isEditing } = item;
-    let classes = '';
-    if (isDone) classes = classNames(classes, 'completed');
-    if (isEditing) classes = classNames(classes, 'editing');
+        const { isDone, isEditing } = item;
 
-    return (
-      <li
-        key={item.created}
-        className={classes}
-      >
-        <Task
-          {...item}
-          onDeleteItem={() => onDeleteItem(item.created)}
-          onToggleDone={() => onToggleDone(item.created)}
-          onEditStart={() => onEditStart(item.created)}
-          onEditInput={onEditInput}
-          onEditComplete={(value) =>
-            onEditComplete(value, item.created)
-          }
-        />
-      </li>
-    );
-  });
+        const classes = classNames({
+          completed: isDone,
+          editing: isEditing,
+        });
 
-  return <ul className='todo-list'>{items}</ul>;
+        return (
+          <li
+            key={item.created}
+            className={classes}
+          >
+            <Task
+              {...item}
+              onDeleteItem={() => onDeleteItem(item.created)}
+              onToggleDone={() => onToggleDone(item.created)}
+              onEditStart={() => onEditStart(item.created)}
+              onEditComplete={(value) =>
+                onEditComplete(value, item.created)
+              }
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
 }
 
 // defaultProps is deprecated, used for training only

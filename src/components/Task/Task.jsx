@@ -17,12 +17,11 @@ export default class Task extends Component {
     const { value } = this.state;
 
     if (!value.trim()) {
-      e.preventDefault();
       return;
     }
-
-    onEditComplete(value);
-    e.preventDefault();
+    if (e.key === 'Enter') {
+      onEditComplete(value);
+    }
   };
 
   render() {
@@ -67,16 +66,11 @@ export default class Task extends Component {
             onClick={onDeleteItem}
           />
         </div>
-        <form
-          onSubmit={this.onSubmit}
-          id={`edit-${created}`}
-          hidden
-        />
         <input
-          onChange={this.onEditInput}
+          onKeyUp={this.onSubmit}
+          onInput={this.onEditInput}
           className='edit'
           value={value}
-          form={`edit-${created}`}
         />
       </>
     );

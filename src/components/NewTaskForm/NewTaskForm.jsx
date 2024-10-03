@@ -11,17 +11,17 @@ export default class NewTaskForm extends Component {
   };
 
   onSubmit = (event) => {
+    event.preventDefault();
+
     const { value } = this.state;
     const { onAddItem } = this.props;
 
     if (!value.trim()) {
-      event.preventDefault();
       return;
     }
     onAddItem(value);
 
     this.setState({ value: '' });
-    event.preventDefault();
   };
 
   render() {
@@ -33,6 +33,7 @@ export default class NewTaskForm extends Component {
           className='new-todo'
           placeholder='What needs to be done?'
           value={value}
+          autoFocus
         />
       </form>
     );
