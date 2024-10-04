@@ -16,12 +16,12 @@ export default class Task extends Component {
     const { onEditComplete } = this.props;
     const { value } = this.state;
 
+    e.preventDefault();
+
     if (!value.trim()) {
       return;
     }
-    if (e.key === 'Enter') {
-      onEditComplete(value);
-    }
+    onEditComplete(value);
   };
 
   render() {
@@ -32,6 +32,7 @@ export default class Task extends Component {
       onToggleDone,
       onEditStart,
       isDone,
+      isEditing,
     } = this.props;
 
     const { value } = this.state;
@@ -66,11 +67,18 @@ export default class Task extends Component {
             onClick={onDeleteItem}
           />
         </div>
+        {isEditing && (
+          <form
+            id={`edit-${created}`}
+            onSubmit={this.onSubmit}
+            hidden
+          />
+        )}
         <input
-          onKeyUp={this.onSubmit}
-          onInput={this.onEditInput}
+          onChange={this.onEditInput}
           className='edit'
           value={value}
+          form={`edit-${created}`}
         />
       </>
     );
