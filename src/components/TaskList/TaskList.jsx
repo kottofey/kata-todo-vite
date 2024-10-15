@@ -8,15 +8,14 @@ export default function TaskList({
   onDeleteItem,
   onToggleDone,
   onEditStart,
-  onEditInput,
   onEditComplete,
 }) {
   return (
     <ul className='todo-list'>
       {todoItems.map((item) => {
-        if (item.hidden) return false;
+        const { isDone, isEditing, hidden, created } = item;
 
-        const { isDone, isEditing } = item;
+        if (hidden) return false;
 
         const classes = classNames({
           completed: isDone,
@@ -30,11 +29,11 @@ export default function TaskList({
           >
             <Task
               {...item}
-              onDeleteItem={() => onDeleteItem(item.created)}
-              onToggleDone={() => onToggleDone(item.created)}
-              onEditStart={() => onEditStart(item.created)}
+              onDeleteItem={() => onDeleteItem(created)}
+              onToggleDone={() => onToggleDone(created)}
+              onEditStart={() => onEditStart(created)}
               onEditComplete={(value) =>
-                onEditComplete(value, item.created)
+                onEditComplete(value, created)
               }
             />
           </li>
