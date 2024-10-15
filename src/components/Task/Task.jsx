@@ -87,11 +87,16 @@ export default class Task extends Component {
 
 Task.defaultProps = {
   description: 'Default Task, something\u0039s w\u0039ong',
+  minutes: null,
+  seconds: null,
   created: new Date().getTime(),
   isDone: false,
 };
+
 Task.propTypes = {
   description: PropTypes.string,
+  minutes: PropTypes.number,
+  seconds: PropTypes.number,
   created: PropTypes.number,
   isDone: PropTypes.bool,
 };

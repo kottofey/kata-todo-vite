@@ -13,9 +13,9 @@ export default class App extends Component {
     filterSelected: 'all',
   };
 
-  onAddItem = (text) => {
+  onAddItem = (text, minutes, seconds) => {
     this.setState(({ todoItems, filterSelected }) => {
-      let newItem = createTask(text);
+      let newItem = createTask(text, minutes, seconds);
       newItem = updateTodoItemFiltered(filterSelected, newItem);
       const newArr = [...todoItems, newItem];
 
