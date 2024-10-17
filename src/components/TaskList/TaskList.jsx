@@ -1,4 +1,3 @@
-import { PropTypes } from 'prop-types';
 import classNames from 'classnames';
 
 import Task from '../Task';
@@ -13,9 +12,9 @@ export default function TaskList({
   return (
     <ul className='todo-list'>
       {todoItems.map((item) => {
-        const { isDone, isEditing, hidden, created } = item;
+        const { isDone, isEditing, isHidden, created } = item;
 
-        if (hidden) return false;
+        if (isHidden) return false;
 
         const classes = classNames({
           completed: isDone,
@@ -42,19 +41,3 @@ export default function TaskList({
     </ul>
   );
 }
-
-// defaultProps is deprecated, used for training only
-TaskList.defaultProps = {
-  todoItems: [],
-};
-
-TaskList.propTypes = {
-  todoItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      description: PropTypes.string,
-      created: PropTypes.number,
-      isDone: PropTypes.bool,
-      isEditing: PropTypes.bool,
-    })
-  ),
-};

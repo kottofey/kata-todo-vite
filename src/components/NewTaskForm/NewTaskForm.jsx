@@ -10,18 +10,7 @@ export default class NewTaskForm extends Component {
   onNewItemInput = (event) => {
     const { value, id } = event.target;
 
-    let newValue = Number.parseInt(value, 10);
-
-    if (id === 'seconds') {
-      if (newValue > 60) newValue = 60;
-      if (newValue < 0) newValue = 0;
-      if (Number.isNaN(newValue)) newValue = '';
-    } else {
-      newValue = value;
-    }
-
-    console.log(id, newValue);
-    this.setState({ [id]: newValue });
+    this.setState({ [id]: value });
   };
 
   onSubmit = (event) => {
@@ -33,13 +22,14 @@ export default class NewTaskForm extends Component {
     if (!newTask.trim()) {
       return;
     }
-    onAddItem(
-      newTask,
-      Number.parseInt(minutes, 10),
-      Number.parseInt(seconds, 10)
-    );
 
-    this.setState({ newTask: '', minutes: '', seconds: '' });
+    onAddItem(newTask, minutes, seconds);
+
+    this.setState({
+      newTask: '',
+      minutes: '',
+      seconds: '',
+    });
   };
 
   render() {
@@ -56,28 +46,34 @@ export default class NewTaskForm extends Component {
           id='newTask'
           value={newTask}
           autoFocus
+          autoComplete='off'
+          required
         />
         <input
           onChange={this.onNewItemInput}
           className='new-todo-form__timer'
           placeholder='Min'
+          type='number'
           id='minutes'
           value={minutes}
           min={0}
-          autoFocus
+          autoComplete='off'
+          required
         />
         <input
           onChange={this.onNewItemInput}
           className='new-todo-form__timer'
           placeholder='Sec'
+          type='number'
           id='seconds'
           min={0}
-          max={60}
+          max={59}
           maxLength={2}
           value={seconds}
-          autoFocus
+          autoComplete='off'
+          required
         />
-        <input
+        <button
           type='submit'
           hidden
         />

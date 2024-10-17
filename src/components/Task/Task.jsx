@@ -33,6 +33,8 @@ export default class Task extends Component {
       onEditStart,
       isDone,
       isEditing,
+      minutes,
+      seconds,
     } = this.props;
 
     const { value } = this.state;
@@ -48,8 +50,12 @@ export default class Task extends Component {
             onClick={onToggleDone}
           />
           <label htmlFor={created}>
-            <span className='description'>{description}</span>
-            <span className='created'>
+            <span className='title'>{description}</span>
+            <Timer
+              minutes={minutes}
+              seconds={seconds}
+            />
+            <span className='description'>
               {formatDistance(created, Date.now(), {
                 includeSeconds: true,
                 addSuffix: true,
@@ -85,18 +91,98 @@ export default class Task extends Component {
   }
 }
 
+class Timer extends Component {
+  state = {};
+
+  componentDidMount() {
+    const { minutes, seconds } = this.props;
+    // const timerId = setInterval(() => {}, 0);
+    this.setState({ minutes, seconds });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { timerId: prevTimerId, isPaused: prevIsPaused } =
+      prevState;
+
+    const { timerId, seconds, minutes, isPaused } = this.state;
+
+    if (prevTimerId !== timerId && !prevIsPaused) {
+      clearTimeout(prevTimerId);
+
+      let newTimerId = setTimeout(() => {
+        let newIsPaused = isPaused;
+        let newMinutes = minutes;
+        let newSeconds = seconds - 1;
+
+        if (newSeconds === -1) {
+          newMinutes = minutes - 1;
+          newSeconds = 59;
+        }
+
+        if (newMinutes === 0 && newSeconds === 1) {
+          newTimerId = undefined;
+          newIsPaused = true;
+        }
+
+        this.setState({
+          minutes: newMinutes,
+          seconds: newSeconds,
+          timerId: newTimerId,
+          isPaused: newIsPaused,
+        });
+      }, 1000);
+    }
+  }
+
+  onTimerStart = (e) => {
+    e.preventDefault();
+
+    const newTimerId = setTimeout(() => {
+      this.setState({
+        timerId: newTimerId,
+        isPaused: false,
+      });
+    }, 0);
+  };
+
+  onTimerPause = (e) => {
+    e.preventDefault();
+
+    const { timerId } = this.state;
+
+    clearTimeout(timerId);
+    this.setState({ isPaused: true });
+  };
+
+  render() {
+    const { minutes, seconds } = this.state;
+
+    return (
+      <span className='description'>
+        <button
+          className='icon icon-play'
+          type='button'
+          onClick={(e) => this.onTimerStart(e)}
+        />
+        <button
+          className='icon icon-pause'
+          type='button'
+          onClick={(e) => this.onTimerPause(e)}
+        />
+        {minutes}:{seconds}
+      </span>
+    );
+  }
+}
+
 Task.defaultProps = {
   description: 'Default Task, something\u0039s w\u0039ong',
-  minutes: null,
-  seconds: null,
   created: new Date().getTime(),
   isDone: false,
 };
 
 Task.propTypes = {
   description: PropTypes.string,
-  minutes: PropTypes.number,
-  seconds: PropTypes.number,
   created: PropTypes.number,
   isDone: PropTypes.bool,
 };

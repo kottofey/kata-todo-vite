@@ -7,12 +7,12 @@
 
 export default function updateTodoItemFiltered(filterSelected, item) {
   if (filterSelected === 'completed' && !item.isDone) {
-    return { ...item, hidden: true };
+    return { ...item, isHidden: true };
   }
 
   if (filterSelected === 'active' && item.isDone) {
-    return { ...item, hidden: true };
+    return { ...item, isHidden: true };
   }
 
-  return { ...item, hidden: false };
+  return { ...item, isHidden: false };
 }
