@@ -24,6 +24,7 @@ export default class NewTaskForm extends Component {
     }
 
     onAddItem(newTask, minutes, seconds);
+    this.newTaskRef.focus();
 
     this.setState({
       newTask: '',
@@ -40,6 +41,7 @@ export default class NewTaskForm extends Component {
         className='new-todo-form'
       >
         <input
+          ref={(newTaskRef) => (this.newTaskRef = newTaskRef)}
           onChange={this.onNewItemInput}
           className='new-todo'
           placeholder='Task'
