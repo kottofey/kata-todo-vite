@@ -28,6 +28,7 @@ export default class App extends Component {
   onDeleteItem = (id) => {
     this.setState(({ todoItems }) => {
       const idx = getItemIndex(todoItems, id);
+      clearTimeout(todoItems[idx].timerId);
 
       return {
         todoItems: [
@@ -125,6 +126,74 @@ export default class App extends Component {
     });
   };
 
+  onTimerStart = (itemId) => {
+    const { todoItems } = this.state;
+
+    const idx = getItemIndex(todoItems, itemId);
+    const { minutes, seconds } = todoItems[idx];
+
+    const timerId = setTimeout(() => {
+      this.timerTick(itemId, minutes, seconds, timerId);
+    }, 1000);
+
+    this.updateTimer(itemId, minutes, seconds, timerId);
+  };
+
+  onTimerPause = (itemId) => {
+    const { todoItems } = this.state;
+
+    const idx = getItemIndex(todoItems, itemId);
+    const { timerId, minutes, seconds } = todoItems[idx];
+
+    clearTimeout(timerId);
+
+    this.updateTimer(itemId, minutes, seconds, null);
+  };
+
+  timerTick = (itemId, minutes, seconds, timerId) => {
+    clearTimeout(timerId);
+
+    let newMinutes = minutes;
+    let newSeconds = seconds - 1;
+
+    if (newSeconds === -1) {
+      newMinutes = minutes - 1;
+      newSeconds = 59;
+    }
+
+    if (newMinutes === 0 && newSeconds === 0) {
+      this.updateTimer(itemId, newMinutes, newSeconds, timerId);
+      return;
+    }
+
+    const newTimerId = setTimeout(() => {
+      this.timerTick(itemId, newMinutes, newSeconds, newTimerId);
+    }, 1000);
+    this.updateTimer(itemId, newMinutes, newSeconds, newTimerId);
+  };
+
+  updateTimer = (itemId, minutes, seconds, timerId) => {
+    this.setState(({ todoItems }) => {
+      const idx = getItemIndex(todoItems, itemId);
+      let item = todoItems[idx];
+
+      item = {
+        ...item,
+        minutes,
+        seconds,
+        timerId,
+      };
+
+      return {
+        todoItems: [
+          ...todoItems.slice(0, idx),
+          item,
+          ...todoItems.slice(idx + 1),
+        ],
+      };
+    });
+  };
+
   render() {
     const { todoItems, filterSelected } = this.state;
 
@@ -137,6 +206,8 @@ export default class App extends Component {
         <section className='main'>
           <TaskList
             todoItems={todoItems}
+            onTimerStart={this.onTimerStart}
+            onTimerPause={this.onTimerPause}
             onDeleteItem={this.onDeleteItem}
             onToggleDone={this.onToggleDone}
             onEditStart={this.onEditStart}

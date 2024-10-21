@@ -4,6 +4,8 @@ import Task from '../Task';
 
 export default function TaskList({
   todoItems,
+  onTimerStart,
+  onTimerPause,
   onDeleteItem,
   onToggleDone,
   onEditStart,
@@ -23,11 +25,13 @@ export default function TaskList({
 
         return (
           <li
-            key={item.created}
+            key={created}
             className={classes}
           >
             <Task
               {...item}
+              onTimerStart={() => onTimerStart(created)}
+              onTimerPause={() => onTimerPause(created)}
               onDeleteItem={() => onDeleteItem(created)}
               onToggleDone={() => onToggleDone(created)}
               onEditStart={() => onEditStart(created)}

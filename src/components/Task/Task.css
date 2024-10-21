@@ -135,13 +135,6 @@
 	font-size: 15px;
 }
 
-.icon-pause:after {
-	content: '⏸';
-}
-
-.icon-play:after {
-	content: '▶';
-}
 
 .todo-list li .edit {
 	display: none;
