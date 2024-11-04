@@ -4,8 +4,6 @@ import Task from '../Task';
 
 export default function TaskList({
   todoItems,
-  onTimerStart,
-  onTimerPause,
   onDeleteItem,
   onToggleDone,
   onEditStart,
@@ -16,11 +14,10 @@ export default function TaskList({
       {todoItems.map((item) => {
         const { isDone, isEditing, isHidden, created } = item;
 
-        if (isHidden) return false;
-
         const classes = classNames({
           completed: isDone,
           editing: isEditing,
+          hidden: isHidden,
         });
 
         return (
@@ -30,8 +27,6 @@ export default function TaskList({
           >
             <Task
               {...item}
-              onTimerStart={() => onTimerStart(created)}
-              onTimerPause={() => onTimerPause(created)}
               onDeleteItem={() => onDeleteItem(created)}
               onToggleDone={() => onToggleDone(created)}
               onEditStart={() => onEditStart(created)}

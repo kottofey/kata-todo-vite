@@ -87,20 +87,20 @@ export default function Task({
   );
 }
 
-// Task.defaultProps = {
-//   description: 'Something wong',
-//   created: new Date().getTime(),
-//   minutes: 0,
-//   seconds: 0,
-//   isDone: false,
-//   isEditing: false,
-// };
-//
-// Task.propTypes = {
-//   description: PropTypes.string,
-//   created: PropTypes.number,
-//   minutes: PropTypes.number,
-//   seconds: PropTypes.number,
-//   isDone: PropTypes.bool,
-//   isEditing: PropTypes.bool,
-// };
+Task.defaultProps = {
+  description: 'Something wong',
+  created: new Date().getTime(),
+  minutes: 0,
+  seconds: 0,
+  isDone: false,
+  isEditing: false,
+};
+
+Task.propTypes = {
+  description: PropTypes.string,
+  created: PropTypes.number,
+  minutes: PropTypes.number,
+  seconds: PropTypes.number,
+  isDone: PropTypes.bool,
+  isEditing: PropTypes.bool,
+};
