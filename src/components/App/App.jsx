@@ -14,23 +14,25 @@ export default function App() {
   const onAddItem = (text, minutes, seconds) => {
     let newItem = createTask(text, minutes, seconds);
     newItem = updateTodoItemFiltered(filterSelected, newItem);
-    const newArr = [...todoItems, newItem];
+    // const newArr = [...todoItems, newItem];
 
-    setTodoItems(newArr);
+    setTodoItems((prevTodoItems) => [...prevTodoItems, newItem]);
   };
 
   const onDeleteItem = (id) => {
     const idx = getItemIndex(todoItems, id);
     clearTimeout(todoItems[idx].timerId);
 
-    setTodoItems([
-      ...todoItems.slice(0, idx),
-      ...todoItems.slice(idx + 1),
+    setTodoItems((prevTodoItems) => [
+      ...prevTodoItems.slice(0, idx),
+      ...prevTodoItems.slice(idx + 1),
     ]);
   };
 
   const onClearCompleted = () => {
-    setTodoItems(todoItems.filter((item) => !item.isDone));
+    setTodoItems((prevTodoItems) =>
+      prevTodoItems.filter((item) => !item.isDone)
+    );
   };
 
   const onToggleDone = (id) => {
@@ -43,20 +45,20 @@ export default function App() {
 
     doneItem = updateTodoItemFiltered(filterSelected, doneItem);
 
-    setTodoItems([
-      ...todoItems.slice(0, idx),
+    setTodoItems((prevTodoItems) => [
+      ...prevTodoItems.slice(0, idx),
       doneItem,
-      ...todoItems.slice(idx + 1),
+      ...prevTodoItems.slice(idx + 1),
     ]);
   };
 
   const onFilterClick = (filter) => {
-    const filteredArray = todoItems.map((item) =>
-      updateTodoItemFiltered(filter, item)
-    );
-
     setFilterSelected(filter);
-    setTodoItems(filteredArray);
+    setTodoItems((prevTodoItems) => {
+      return prevTodoItems.map((item) =>
+        updateTodoItemFiltered(filter, item)
+      );
+    });
   };
 
   const onEditStart = (id) => {
@@ -66,18 +68,12 @@ export default function App() {
       ...todoItems[idx],
       isEditing: true,
     };
-    // const newEditItems = {
-    //   ...editItems,
-    //   [idx]: editItem.description,
-    // };
 
-    setTodoItems([
-      ...todoItems.slice(0, idx),
+    setTodoItems((prevTodoItems) => [
+      ...prevTodoItems.slice(0, idx),
       editItem,
-      ...todoItems.slice(idx + 1),
+      ...prevTodoItems.slice(idx + 1),
     ]);
-
-    // setEditItems(newEditItems);
   };
 
   const onEditComplete = (value, id) => {
@@ -90,13 +86,11 @@ export default function App() {
 
     editItem = updateTodoItemFiltered(filterSelected, editItem);
 
-    const newArr = [
-      ...todoItems.slice(0, idx),
+    setTodoItems((prevTodoItems) => [
+      ...prevTodoItems.slice(0, idx),
       editItem,
-      ...todoItems.slice(idx + 1),
-    ];
-
-    setTodoItems(newArr);
+      ...prevTodoItems.slice(idx + 1),
+    ]);
   };
 
   return (

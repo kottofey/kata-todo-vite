@@ -6,6 +6,7 @@ export default function Timer({ minutes, seconds }) {
   const [isRunning, setIsRunning] = useState(false);
 
   const onTimerStart = () => {
+    if (min === 0 && sec === 0) return;
     setIsRunning(true);
   };
 
@@ -17,10 +18,10 @@ export default function Timer({ minutes, seconds }) {
     let timer = null;
     if (isRunning) {
       timer = setTimeout(() => {
-        setSec(sec - 1);
+        setSec((prevSec) => prevSec - 1);
 
-        if (sec === -1) {
-          setMin(min - 1);
+        if (sec === 0) {
+          setMin((prevMin) => prevMin - 1);
           setSec(59);
         }
 
